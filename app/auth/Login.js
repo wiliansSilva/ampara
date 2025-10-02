@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         marginBottom: 25,
         alignSelf: "flex-start",
+
     },
     button: {
         backgroundColor: "#9C6ADE",
