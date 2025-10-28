@@ -16,7 +16,7 @@ const { width, height } = Dimensions.get("window");
 // ajuste a proporção se quiser a imagem maior/menor
 const IMAGE_HEIGHT = Math.round(height * 0.55);
 
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }) {
 
     const data = [
         {
@@ -56,7 +56,7 @@ export default function HomeScreen() {
         if (currentIndex < data.length - 1) {
             setCurrentIndex(currentIndex + 1);
         } else {
-            console.log("Onboarding concluído");
+            navigation.replace('SupportedPersons');
         }
     };
 
