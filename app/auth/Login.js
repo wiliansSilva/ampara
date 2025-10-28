@@ -1,16 +1,14 @@
 import React, { useState, useRef } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from "react-native";
 
-export default function LoginScreen() {
+export default function LoginScreen({ navigation }) {
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
 
     const senhaRef = useRef(null);
 
     const handleLogin = () => {
-        console.log("Email:", email);
-        console.log("Senha:", senha);
-        // lógica de login
+        navigation.replace('Onboarding');
     };
 
     return (
@@ -90,7 +88,6 @@ const styles = StyleSheet.create({
         fontSize: 14,
         marginBottom: 25,
         alignSelf: "flex-start",
-
     },
     button: {
         backgroundColor: "#9C6ADE",

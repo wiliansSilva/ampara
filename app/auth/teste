@@ -1,0 +1,146 @@
+import React from "react";
+import {
+    View,
+    Text,
+    StyleSheet,
+    ImageBackground,
+    Dimensions,
+    TouchableOpacity,
+} from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import { Ionicons } from "@expo/vector-icons";
+
+const { width, height } = Dimensions.get("window");
+// ajuste a proporção se quiser a imagem maior/menor
+const IMAGE_HEIGHT = Math.round(height * 0.55);
+
+export default function HomeScreen() {
+    return (
+        <View style={styles.container}>
+            <TouchableOpacity style={styles.closeButton}>
+                <Ionicons name="close" size={26} color="#9C6ADE" />
+            </TouchableOpacity>
+
+            <Text style={styles.logo}>ampara</Text>
+
+            <Text style={styles.title}>Aqui você encontra apoio!</Text>
+
+            <Text style={styles.description}>
+                Encontre ajuda para recomeçar. Moradia, trabalho, saúde, orientação e
+                muito mais de mulher para mulher.
+            </Text>
+
+            {/* ImageBackground garante que o degradê fique sobre a imagem real */}
+            <ImageBackground
+                source={require("../../assets/woman_one.png")}
+                style={[styles.imageBackground, { height: IMAGE_HEIGHT }]}
+                imageStyle={styles.imageStyle}
+                resizeMode="contain"
+            >
+                {/* Degradê posicionado na parte inferior da imagem */}
+                <LinearGradient
+                    colors={["rgba(244,225,242,0)", "#F4E1F2"]} // do transparente ao background
+                    start={[0.5, 0]}
+                    end={[0.5, 1]}
+                    style={[styles.gradient, { height: Math.round(IMAGE_HEIGHT * 0.30) }]}
+                    pointerEvents="none"
+                />
+            </ImageBackground>
+
+            /* Indicadores de página */}
+                        <View style={styles.dotsContainer}>
+                            <View style={[styles.dot, styles.activeDot]} />
+                            <View style={styles.dot} />
+                            <View style={styles.dot} />
+                        </View>
+
+                        {/* Botão Próximo */}
+                        <TouchableOpacity style={styles.nextButton}>
+                            <Ionicons name="arrow-forward" size={28} color="#7A4DCC" />
+                        </TouchableOpacity>
+        </View>
+    );
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: "#F4E1F2", // mesmo que o degradê final
+        paddingTop: 60,
+        paddingHorizontal: 24,
+        alignItems: "center",
+    },
+    closeButton: {
+        position: "absolute",
+        top: 40,
+        right: 22,
+        zIndex: 10,
+    },
+    logo: {
+        marginTop: 8,
+        fontSize: 44,
+        fontWeight: "700",
+        color: "#9C6ADE",
+    },
+    title: {
+        marginTop: 18,
+        fontSize: 18,
+        fontWeight: "700",
+        color: "#7A4DCC",
+        textAlign: "center",
+    },
+    description: {
+        marginTop: 12,
+        fontSize: 14,
+        color: "#9B8FA6",
+        textAlign: "center",
+        marginHorizontal: 12,
+        lineHeight: 20,
+    },
+    imageBackground: {
+        width: "100%",
+        marginTop: 8,
+        justifyContent: "flex-end", // garante que o degradê fique na parte baixa
+        alignItems: "center",
+    },
+    imageStyle: {
+        width: "100%",
+        height: "100%",
+    },
+    gradient: {
+        position: "absolute",
+        left: 0,
+        right: 0,
+        bottom: 50,
+    },
+    footer: {
+        width: "100%",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        paddingHorizontal: 8,
+        paddingBottom: 34,
+        marginTop: 6,
+    },
+    dotsContainer: {
+            flexDirection: "row",
+            marginBottom: 20,
+        },
+        dot: {
+            width: 8,
+            height: 8,
+            borderRadius: 4,
+            backgroundColor: "#C8A8F0",
+            marginHorizontal: 5,
+        },
+        activeDot: {
+            width: 20,
+            borderRadius: 5,
+            backgroundColor: "#7A4DCC",
+        },
+        nextButton: {
+            position: "absolute",
+            bottom: 40,
+            right: 30,
+        },
+});
