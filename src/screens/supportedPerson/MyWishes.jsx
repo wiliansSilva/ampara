@@ -1,0 +1,155 @@
+import React, { useState } from 'react';
+import {
+    View,
+    Text,
+    StyleSheet,
+    SafeAreaView,
+    TouchableOpacity,
+    StatusBar,
+    FlatList,
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+
+export default function MeusPedidos() {
+    // Dados de exemplo para a listagem
+    const [pedidos, setPedidos] = useState ([
+        {
+            id: '1',
+            titulo: 'Mensagem enviada',
+            mensagem: 'Oi, estou passando por um momento difícil. Preciso de alguém para conversar, entender meus sentimentos e me ajudar a encontrar caminhos para seguir em frente.',
+            status: 'Aguardando',
+        },
+        {
+            id: '2',
+            titulo: 'Mensagem enviada',
+            mensagem: 'Gostaria de conversar sobre ansiedade e como lidar melhor com situações estressantes do dia a dia.',
+            status: 'Em andamento',
+        },
+        {
+            id: '3',
+            titulo: 'Mensagem enviada',
+            mensagem: 'Preciso de orientação para melhorar minha autoestima e confiança pessoal.',
+            status: 'Concluído',
+        },
+    ]);
+
+    const renderCard = ({ item }) => (
+        <View style={styles.card}>
+            <Text style={styles.cardTitle}>{item.titulo}</Text>
+
+            <Text style={styles.cardMessage}>{item.mensagem}</Text>
+
+            <Text style={styles.statusLabel}>Status</Text>
+            <Text style={styles.statusValue}>{item.status}</Text>
+        </View>
+    );
+
+    return (
+        <SafeAreaView style={styles.container}>
+            <StatusBar barStyle="dark-content" backgroundColor="#E8D9F0" />
+
+            {/* Header */}
+            <View style={styles.header}>
+                <TouchableOpacity style={styles.menuButton}>
+                    <Ionicons name="menu" size={28} color="#8B7BA8" />
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.notificationButton}>
+                    <Ionicons name="notifications-outline" size={28} color="#8B7BA8" />
+                </TouchableOpacity>
+            </View>
+
+            {/* Título */}
+            <Text style={styles.title}>Meus pedidos</Text>
+
+            {/* Lista de Cards */}
+            <FlatList
+                data={pedidos}
+                renderItem={renderCard}
+                keyExtractor={(item) => item.id}
+                contentContainerStyle={styles.listContent}
+                showsVerticalScrollIndicator={false}
+            />
+
+            {/* Botão Voltar */}
+            <TouchableOpacity style={styles.backButton}>
+                <Text style={styles.backButtonText}>Voltar</Text>
+            </TouchableOpacity>
+        </SafeAreaView>
+    );
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#E8D9F0',
+    },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        paddingTop: 20,
+        paddingBottom: 10,
+    },
+    menuButton: {
+        padding: 5,
+    },
+    notificationButton: {
+        padding: 5,
+    },
+    title: {
+        fontSize: 28,
+        fontWeight: '600',
+        color: '#9F7FD4',
+        textAlign: 'center',
+        marginTop: 30,
+        marginBottom: 20,
+    },
+    listContent: {
+        paddingHorizontal: 20,
+        paddingBottom: 100, // Espaço para o botão voltar
+    },
+    card: {
+        backgroundColor: '#D9C9E8',
+        borderRadius: 20,
+        padding: 24,
+        marginBottom: 20,
+    },
+    cardTitle: {
+        fontSize: 18,
+        fontWeight: '600',
+        color: '#9F7FD4',
+        marginBottom: 16,
+    },
+    cardMessage: {
+        fontSize: 15,
+        color: '#8B7BA8',
+        lineHeight: 22,
+        marginBottom: 24,
+    },
+    statusLabel: {
+        fontSize: 18,
+        fontWeight: '600',
+        color: '#9F7FD4',
+        marginBottom: 8,
+    },
+    statusValue: {
+        fontSize: 15,
+        color: '#8B7BA8',
+    },
+    backButton: {
+        position: 'absolute',
+        bottom: 40,
+        alignSelf: 'center',
+        borderRadius: 12,
+        paddingVertical: 12,
+        paddingHorizontal: 40,
+        backgroundColor: '#E8D9F0',
+    },
+    backButtonText: {
+        fontSize: 18,
+        fontWeight: '600',
+        color: '#9F7FD4',
+    },
+});
