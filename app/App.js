@@ -6,8 +6,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './auth/Login';
 import Onboarding from '../src/screens/Onboarding';
 import SupportedPerson from '../src/screens/supportedPerson/SupportedPerson'
-import SuccesPerson from '../src/screens/supportedPerson/Conclusion'
+import Conclusion from '../src/screens/supportedPerson/Conclusion'
 import MyWishes from '../src/screens/supportedPerson/MyWishes'
+import HelperList from '../src/screens/helper/HelperList'
+import SelectedHelp from "../src/screens/helper/SelectedHelp";
 
 const Stack = createNativeStackNavigator();
 
@@ -18,8 +20,10 @@ export default function App() {
                 <Stack.Screen name="Login" component={LoginScreen} />
                 <Stack.Screen name="Onboarding" component={Onboarding} />
                 <Stack.Screen name="SupportedPersons" component={SupportedPerson} />
-                <Stack.Screen name="SuccesPersons" component={SuccesPerson} />
+                <Stack.Screen name="Conclusion" component={Conclusion} />
                 <Stack.Screen name="Wishe" component={MyWishes} />
+                <Stack.Screen name="HelperLists" component={HelperList} />
+                <Stack.Screen name="SelectedsHelp" component={SelectedHelp} />
             </Stack.Navigator>
         </NavigationContainer>
     );
