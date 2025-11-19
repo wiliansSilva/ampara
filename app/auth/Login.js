@@ -8,7 +8,7 @@ export default function LoginScreen({ navigation }) {
     const senhaRef = useRef(null);
 
     const handleLogin = () => {
-        navigation.replace('Onboarding');
+        navigation.replace('HelperLists');
     };
 
     return (

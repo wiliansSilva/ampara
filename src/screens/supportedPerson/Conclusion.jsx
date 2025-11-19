@@ -2,7 +2,8 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons"; // ou use react-native-vector-icons
 
-export default function SucessoScreen({ navigation }) {
+export default function SucessoScreen({ navigation, route }) {
+    const origem = route.params?.from;
     return (
         <View style={styles.container}>
             <Ionicons name="heart" size={40} color="#9C6ADE" style={styles.icon} />
@@ -16,7 +17,13 @@ export default function SucessoScreen({ navigation }) {
 
             <TouchableOpacity
                 style={styles.backButton}
-                onPress={() => navigation.navigate("Wishe")}
+                onPress={() =>
+                    {if (origem === "SelectedsHelp"){
+                        navigation.navigate("HelperLists")
+                    }else{
+                        navigation.navigate("Wishe")
+                    }     }
+            }
             >
                 <Text style={styles.backText}>Voltar para a página inicial</Text>
             </TouchableOpacity>
