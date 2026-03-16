@@ -17,12 +17,20 @@ export default function SucessoScreen({ navigation, route }) {
 
             <TouchableOpacity
                 style={styles.backButton}
-                onPress={() =>
-                    {if (origem === "SelectedsHelp"){
-                        navigation.navigate("HelperLists")
-                    }else{
-                        navigation.navigate("Wishe")
-                    }     }
+                onPress={() => {
+                    switch (origem) {
+                        case "SelectedHelp":
+                            navigation.navigate("HelperLists")
+                            break
+
+                        case "ownerDetailConfirm":
+                            navigation.navigate("Owners")
+                            break
+
+                        default:
+                            navigation.navigate("Wishe")
+                    }
+                }
             }
             >
                 <Text style={styles.backText}>Voltar para a página inicial</Text>

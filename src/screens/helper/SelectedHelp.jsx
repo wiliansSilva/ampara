@@ -1,18 +1,56 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     View,
     Text,
     StyleSheet,
     TouchableOpacity,
-    SafeAreaView,
+    ActivityIndicator,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
 
 export default function SelectedHelp({ navigation, route }) {
-    const origem = route.params?.from;
+    const { requestId, userMessage } = route.params;
+
+    const [loading, setLoading] = useState(false);
+
     const mensagem =
-        route?.params?.mensagem ||
+        userMessage ||
         "Oi, estou passando por um momento difícil. Preciso de alguém para conversar, entender meus sentimentos e me ajudar a encontrar caminhos para seguir em frente.";
+
+    const handleAvailableSupporter = async () => {
+        try {
+            setLoading(true);
+
+            const accessToken = await AsyncStorage.getItem("@accessToken");
+
+            const response = await fetch(
+                `https://ampara-api-1028004784154.us-central1.run.app/request/offer-support/${requestId}`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            );
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.log("Erro ao amparar:", errorText);
+                throw new Error("Erro ao amparar pessoa");
+            }
+
+            navigation.navigate("Conclusion", {
+                from: "SelectedHelp",
+                requestId,
+            });
+        } catch (error) {
+            console.log("Erro:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <View style={styles.container}>
@@ -38,16 +76,26 @@ export default function SelectedHelp({ navigation, route }) {
             <View style={styles.footer}>
                 <TouchableOpacity
                     style={styles.buttonPrimary}
-                    onPress={() => navigation.navigate('Conclusion', { from: "SelectedsHelp" })}
+                    onPress={handleAvailableSupporter}
+                    disabled={loading}
                 >
-                    <Text style={styles.buttonPrimaryText}>Amparar pessoa</Text>
+                    {loading ? (
+                        <ActivityIndicator color="#FFF" />
+                    ) : (
+                        <Text style={styles.buttonPrimaryText}>
+                            Amparar pessoa
+                        </Text>
+                    )}
                 </TouchableOpacity>
 
                 <TouchableOpacity
                     onPress={() => navigation.goBack()}
                     style={styles.backButton}
+                    disabled={loading}
                 >
-                    <Text style={styles.backButtonText}>Voltar para a página inicial</Text>
+                    <Text style={styles.backButtonText}>
+                        Voltar para a página inicial
+                    </Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -59,7 +107,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#F4E9FB",
         paddingHorizontal: 24,
-        paddingTop: 60
+        paddingTop: 60,
     },
     header: {
         flexDirection: "row",
@@ -77,7 +125,7 @@ const styles = StyleSheet.create({
     },
     centerContainer: {
         flex: 1,
-        justifyContent: "center", // 🔹 Centraliza verticalmente o card
+        justifyContent: "center",
         alignItems: "center",
     },
     card: {
@@ -100,6 +148,8 @@ const styles = StyleSheet.create({
         borderRadius: 14,
         width: "100%",
         alignItems: "center",
+        justifyContent: "center",
+        minHeight: 52,
     },
     buttonPrimaryText: {
         color: "#FFF",

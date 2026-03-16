@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
     View,
     Text,
@@ -7,31 +7,74 @@ import {
     TouchableOpacity,
     StatusBar,
     FlatList,
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+    ActivityIndicator,
+    Alert,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function MeusPedidos() {
-    // Dados de exemplo para a listagem
-    const [pedidos, setPedidos] = useState ([
-        {
-            id: '1',
-            titulo: 'Mensagem enviada',
-            mensagem: 'Oi, estou passando por um momento difícil. Preciso de alguém para conversar, entender meus sentimentos e me ajudar a encontrar caminhos para seguir em frente.',
-            status: 'Aguardando',
-        },
-        {
-            id: '2',
-            titulo: 'Mensagem enviada',
-            mensagem: 'Gostaria de conversar sobre ansiedade e como lidar melhor com situações estressantes do dia a dia.',
-            status: 'Em andamento',
-        },
-        {
-            id: '3',
-            titulo: 'Mensagem enviada',
-            mensagem: 'Preciso de orientação para melhorar minha autoestima e confiança pessoal.',
-            status: 'Concluído',
-        },
-    ]);
+export default function MeusPedidos({ navigation }) {
+    const [pedidos, setPedidos] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    /** 🔹 Busca pedidos do usuário */
+    useEffect(() => {
+        const fetchRequests = async () => {
+            try {
+                const token = await AsyncStorage.getItem("@accessToken");
+
+                const response = await fetch(
+                    "https://ampara-api-1028004784154.us-central1.run.app/request/user",
+                    {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+
+                if (!response.ok) {
+                    throw new Error("Erro ao buscar pedidos");
+                }
+
+                const data = await response.json();
+
+                const formattedData = data.map((item) => ({
+                    id: item._id,
+                    titulo: "Mensagem enviada",
+                    mensagem: item.userMessage,
+                    status: formatStatus(item.status),
+                }));
+
+                setPedidos(formattedData);
+            } catch (error) {
+                console.log(error);
+                Alert.alert(
+                    "Erro",
+                    "Não foi possível carregar seus pedidos"
+                );
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchRequests();
+    }, []);
+
+    /** 🔹 Padroniza status */
+    const formatStatus = (status) => {
+        switch (status) {
+            case "pending":
+                return "Aguardando";
+            case "in_progress":
+                return "Em andamento";
+            case "finished":
+                return "Concluído";
+            default:
+                return status;
+        }
+    };
 
     const renderCard = ({ item }) => (
         <View style={styles.card}>
@@ -55,24 +98,39 @@ export default function MeusPedidos() {
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.notificationButton}>
-                    <Ionicons name="notifications-outline" size={28} color="#8B7BA8" />
+                    <Ionicons
+                        name="notifications-outline"
+                        size={28}
+                        color="#8B7BA8"
+                    />
                 </TouchableOpacity>
             </View>
 
             {/* Título */}
             <Text style={styles.title}>Meus pedidos</Text>
 
-            {/* Lista de Cards */}
-            <FlatList
-                data={pedidos}
-                renderItem={renderCard}
-                keyExtractor={(item) => item.id}
-                contentContainerStyle={styles.listContent}
-                showsVerticalScrollIndicator={false}
-            />
+            {/* Loader */}
+            {loading ? (
+                <ActivityIndicator
+                    size="large"
+                    color="#9F7FD4"
+                    style={{ marginTop: 40 }}
+                />
+            ) : (
+                <FlatList
+                    data={pedidos}
+                    renderItem={renderCard}
+                    keyExtractor={(item) => item.id}
+                    contentContainerStyle={styles.listContent}
+                    showsVerticalScrollIndicator={false}
+                />
+            )}
 
             {/* Botão Voltar */}
-            <TouchableOpacity style={styles.backButton}>
+            <TouchableOpacity
+                style={styles.backButton}
+                onPress={() => navigation.goBack()}
+            >
                 <Text style={styles.backButtonText}>Voltar</Text>
             </TouchableOpacity>
         </SafeAreaView>
@@ -82,12 +140,12 @@ export default function MeusPedidos() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#E8D9F0',
+        backgroundColor: "#E8D9F0",
     },
     header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
         paddingHorizontal: 20,
         paddingTop: 20,
         paddingBottom: 10,
@@ -100,56 +158,56 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 28,
-        fontWeight: '600',
-        color: '#9F7FD4',
-        textAlign: 'center',
+        fontWeight: "600",
+        color: "#9F7FD4",
+        textAlign: "center",
         marginTop: 30,
         marginBottom: 20,
     },
     listContent: {
         paddingHorizontal: 20,
-        paddingBottom: 100, // Espaço para o botão voltar
+        paddingBottom: 120,
     },
     card: {
-        backgroundColor: '#D9C9E8',
+        backgroundColor: "#D9C9E8",
         borderRadius: 20,
         padding: 24,
         marginBottom: 20,
     },
     cardTitle: {
         fontSize: 18,
-        fontWeight: '600',
-        color: '#9F7FD4',
+        fontWeight: "600",
+        color: "#9F7FD4",
         marginBottom: 16,
     },
     cardMessage: {
         fontSize: 15,
-        color: '#8B7BA8',
+        color: "#8B7BA8",
         lineHeight: 22,
         marginBottom: 24,
     },
     statusLabel: {
         fontSize: 18,
-        fontWeight: '600',
-        color: '#9F7FD4',
+        fontWeight: "600",
+        color: "#9F7FD4",
         marginBottom: 8,
     },
     statusValue: {
         fontSize: 15,
-        color: '#8B7BA8',
+        color: "#8B7BA8",
     },
     backButton: {
-        position: 'absolute',
+        position: "absolute",
         bottom: 40,
-        alignSelf: 'center',
+        alignSelf: "center",
         borderRadius: 12,
         paddingVertical: 12,
         paddingHorizontal: 40,
-        backgroundColor: '#E8D9F0',
+        backgroundColor: "#E8D9F0",
     },
     backButtonText: {
         fontSize: 18,
-        fontWeight: '600',
-        color: '#9F7FD4',
+        fontWeight: "600",
+        color: "#9F7FD4",
     },
 });

@@ -10,6 +10,10 @@ import Conclusion from '../src/screens/supportedPerson/Conclusion'
 import MyWishes from '../src/screens/supportedPerson/MyWishes'
 import HelperList from '../src/screens/helper/HelperList'
 import SelectedHelp from "../src/screens/helper/SelectedHelp";
+import Owner from "../src/screens/owner/Owner"
+import OwnerDetails from "../src/screens/owner/OwnerDetails"
+import CreateAccount from "../app/auth/CreateAccount"
+import OwnerDetailsConfirm from  "../src/screens/owner/OwnerDetailConfirm"
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +28,10 @@ export default function App() {
                 <Stack.Screen name="Wishe" component={MyWishes} />
                 <Stack.Screen name="HelperLists" component={HelperList} />
                 <Stack.Screen name="SelectedsHelp" component={SelectedHelp} />
+                <Stack.Screen name="Owners" component={Owner} />
+                <Stack.Screen name="OwnerDetails" component={OwnerDetails} />
+                <Stack.Screen name="CreateAcc" component={CreateAccount} />
+                <Stack.Screen name="OwnerDetailsConfirm" component={OwnerDetailsConfirm} />
             </Stack.Navigator>
         </NavigationContainer>
     );

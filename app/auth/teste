@@ -6,17 +6,17 @@ import {
     ImageBackground,
     Dimensions,
     TouchableOpacity,
+    SafeAreaView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 
-const { width, height } = Dimensions.get("window");
-// ajuste a proporção se quiser a imagem maior/menor
+const { height } = Dimensions.get("window");
 const IMAGE_HEIGHT = Math.round(height * 0.55);
 
 export default function HomeScreen() {
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <TouchableOpacity style={styles.closeButton}>
                 <Ionicons name="close" size={26} color="#9C6ADE" />
             </TouchableOpacity>
@@ -30,16 +30,14 @@ export default function HomeScreen() {
                 muito mais de mulher para mulher.
             </Text>
 
-            {/* ImageBackground garante que o degradê fique sobre a imagem real */}
             <ImageBackground
                 source={require("../../assets/woman_one.png")}
                 style={[styles.imageBackground, { height: IMAGE_HEIGHT }]}
                 imageStyle={styles.imageStyle}
                 resizeMode="contain"
             >
-                {/* Degradê posicionado na parte inferior da imagem */}
                 <LinearGradient
-                    colors={["rgba(244,225,242,0)", "#F4E1F2"]} // do transparente ao background
+                    colors={["rgba(244,225,242,0)", "#F4E1F2"]}
                     start={[0.5, 0]}
                     end={[0.5, 1]}
                     style={[styles.gradient, { height: Math.round(IMAGE_HEIGHT * 0.30) }]}
@@ -47,32 +45,35 @@ export default function HomeScreen() {
                 />
             </ImageBackground>
 
-            /* Indicadores de página */}
-                        <View style={styles.dotsContainer}>
-                            <View style={[styles.dot, styles.activeDot]} />
-                            <View style={styles.dot} />
-                            <View style={styles.dot} />
-                        </View>
+            {/* Footer */}
+            <View style={styles.footer}>
+                {/* Indicadores */}
+                <View style={styles.dotsContainer}>
+                    <View style={[styles.dot, styles.activeDot]} />
+                    <View style={styles.dot} />
+                    <View style={styles.dot} />
+                </View>
 
-                        {/* Botão Próximo */}
-                        <TouchableOpacity style={styles.nextButton}>
-                            <Ionicons name="arrow-forward" size={28} color="#7A4DCC" />
-                        </TouchableOpacity>
-        </View>
+                {/* Botão próximo */}
+                <TouchableOpacity style={styles.nextButton}>
+                    <Ionicons name="arrow-forward" size={28} color="#7A4DCC" />
+                </TouchableOpacity>
+            </View>
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#F4E1F2", // mesmo que o degradê final
-        paddingTop: 60,
+        backgroundColor: "#F4E1F2",
+        paddingTop: 40,
         paddingHorizontal: 24,
         alignItems: "center",
     },
     closeButton: {
         position: "absolute",
-        top: 40,
+        top: 20,
         right: 22,
         zIndex: 10,
     },
@@ -99,8 +100,8 @@ const styles = StyleSheet.create({
     },
     imageBackground: {
         width: "100%",
-        marginTop: 8,
-        justifyContent: "flex-end", // garante que o degradê fique na parte baixa
+        marginTop: 10,
+        justifyContent: "flex-end",
         alignItems: "center",
     },
     imageStyle: {
@@ -113,34 +114,37 @@ const styles = StyleSheet.create({
         right: 0,
         bottom: 50,
     },
+
     footer: {
-        width: "100%",
-        flexDirection: "row",
-        justifyContent: "space-between",
+        position: "absolute",
+        bottom: 40,
+        left: 0,
+        right: 0,
         alignItems: "center",
-        paddingHorizontal: 8,
-        paddingBottom: 34,
-        marginTop: 6,
     },
+
     dotsContainer: {
-            flexDirection: "row",
-            marginBottom: 20,
-        },
-        dot: {
-            width: 8,
-            height: 8,
-            borderRadius: 4,
-            backgroundColor: "#C8A8F0",
-            marginHorizontal: 5,
-        },
-        activeDot: {
-            width: 20,
-            borderRadius: 5,
-            backgroundColor: "#7A4DCC",
-        },
-        nextButton: {
-            position: "absolute",
-            bottom: 40,
-            right: 30,
-        },
+        flexDirection: "row",
+        marginBottom: 20,
+    },
+
+    dot: {
+        width: 8,
+        height: 8,
+        borderRadius: 4,
+        backgroundColor: "#C8A8F0",
+        marginHorizontal: 5,
+    },
+
+    activeDot: {
+        width: 20,
+        borderRadius: 5,
+        backgroundColor: "#7A4DCC",
+    },
+
+    nextButton: {
+        position: "absolute",
+        right: 30,
+        bottom: 0,
+    },
 });
