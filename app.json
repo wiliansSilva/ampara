@@ -4,28 +4,31 @@
     "slug": "ampara",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/ampara_icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/ampara_icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.wilianssilva.ampara"
+      "supportsTablet": false,
+      "bundleIdentifier": "com.project.ampara",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/ampara_icon.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.wilianssilva.ampara"
+      "package": "com.project.ampara"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/ampara_icon.png"
     },
     "extra": {
       "eas": {

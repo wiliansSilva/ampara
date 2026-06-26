@@ -60,16 +60,6 @@ export default function Owner({ navigation }) {
 
     return (
         <View style={styles.container}>
-            {/* TOPO */}
-            <View style={styles.header}>
-                <Ionicons name="menu" size={34} color="#9C83D6" />
-                <Ionicons
-                    name="notifications-outline"
-                    size={30}
-                    color="#9C83D6"
-                />
-            </View>
-
             <Text style={styles.title}>Bem-vinda</Text>
 
             {loading ? (

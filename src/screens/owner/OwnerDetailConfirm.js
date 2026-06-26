@@ -64,16 +64,6 @@ export default function OwnerDetailsConfirm({ navigation, route }) {
     return (
         <View style={styles.outerContainer}>
             <View style={styles.cardContainer}>
-                {/* HEADER */}
-                <View style={styles.header}>
-                    <TouchableOpacity activeOpacity={0.8}>
-                        <Ionicons name="menu" size={28} color="#9C83D6" />
-                    </TouchableOpacity>
-
-                    <TouchableOpacity activeOpacity={0.8}>
-                        <Ionicons name="notifications-outline" size={26} color="#9C83D6" />
-                    </TouchableOpacity>
-                </View>
 
                 <ScrollView
                     showsVerticalScrollIndicator={false}

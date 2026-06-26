@@ -91,21 +91,6 @@ export default function MeusPedidos({ navigation }) {
         <SafeAreaView style={styles.container}>
             <StatusBar barStyle="dark-content" backgroundColor="#E8D9F0" />
 
-            {/* Header */}
-            <View style={styles.header}>
-                <TouchableOpacity style={styles.menuButton}>
-                    <Ionicons name="menu" size={28} color="#8B7BA8" />
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.notificationButton}>
-                    <Ionicons
-                        name="notifications-outline"
-                        size={28}
-                        color="#8B7BA8"
-                    />
-                </TouchableOpacity>
-            </View>
-
             {/* Título */}
             <Text style={styles.title}>Meus pedidos</Text>
 

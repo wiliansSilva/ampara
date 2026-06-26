@@ -50,7 +50,7 @@ export default function LoginScreen({ navigation }) {
                 }
             );
 
-            console.log("Status da resposta:", response.status);
+            console.log("Status da resposta:", response);
 
             const text = await response.text();
 
@@ -64,29 +64,49 @@ export default function LoginScreen({ navigation }) {
             console.log("Corpo da resposta:", data);
 
             if (!response.ok) {
-                Alert.alert("Erro", data.message || "Erro ao realizar login");
+                const errorMessage = Array.isArray(data.message)
+                    ? data.message.join("\n")
+                    : data.message || "Erro ao realizar login";
+
+                Alert.alert("Erro", errorMessage);
                 return;
             }
 
+            console.log(email)
             const accessToken = data.accessToken;
             await AsyncStorage.setItem("@accessToken", accessToken);
+            await AsyncStorage.setItem("@email", email);
 
             if (!accessToken) {
                 Alert.alert("Erro", "Token não retornado pelo servidor");
                 return;
             }
 
-            const { profile } = jwtDecode(accessToken);
-            console.log("Payload do token:", profile);
+            try {
+                const { profile } = jwtDecode(accessToken);
 
-            const route = getRouteByProfile(profile);
+                console.log("Payload do token:", profile);
 
-            navigation.reset({
-                routes: [{ name: route }],
-            });
+                const route = getRouteByProfile(profile);
+
+                navigation.reset({
+                    routes: [{ name: route }],
+                });
+            } catch (e) {
+                console.log("Erro ao decodificar token:", e);
+                Alert.alert("Erro", "Token inválido");
+            }
         } catch (error) {
             console.log("Erro inesperado:", error);
-            Alert.alert("Erro", "Não foi possível conectar ao servidor");
+            if (!response.ok) {
+                Alert.alert(
+                    "Erro",
+                    Array.isArray(data.message)
+                        ? data.message.join("\n")
+                        : data.message || "Erro ao realizar login"
+                );
+                return;
+            }
         } finally {
             setLoading(false);
         }

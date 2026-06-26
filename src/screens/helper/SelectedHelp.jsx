@@ -54,12 +54,6 @@ export default function SelectedHelp({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            {/* Header */}
-            <View style={styles.header}>
-                <Ionicons name="menu" size={28} color="#9C6ADE" />
-                <Ionicons name="notifications-outline" size={28} color="#9C6ADE" />
-            </View>
-
             {/* Título */}
             <Text style={styles.title}>
                 Você deseja amparar a pessoa com a mensagem abaixo?

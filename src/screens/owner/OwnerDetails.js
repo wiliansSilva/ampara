@@ -59,16 +59,6 @@ export default function OwnerDetails({navigation}) {
 
     return (
         <View style={styles.container}>
-            {/* HEADER */}
-            <View style={styles.header}>
-                <Ionicons name="menu" size={34} color="#9C83D6" />
-                <Ionicons
-                    name="notifications-outline"
-                    size={30}
-                    color="#9C83D6"
-                />
-            </View>
-
             {loading ? (
                 <ActivityIndicator size="large" color="#9C83D6" />
             ) : (
