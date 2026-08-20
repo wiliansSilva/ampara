@@ -17,6 +17,7 @@ export default function OwnerDetails({navigation}) {
 
     const [amparadores, setAmparadores] = useState([]);
     const [data, setData] = useState([]);
+    const [pessoa, setPessoa] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -45,11 +46,43 @@ export default function OwnerDetails({navigation}) {
             }
 
             const data = await response.json();
-            console.log(data)
-            //const request = data.find((item) => item._id === requestId);
 
             setAmparadores(data.availableSupporters || []);
             setData(data || []);
+
+            // A resposta do /request/mediator traz name/age/city/state,
+            // mas não email/telefone. Buscamos o usuário completo pelo userId.
+            let pessoaCompleta = { ...(data.user || {}) };
+
+            if (data.userId) {
+                try {
+                    const usersResponse = await fetch(
+                        "https://ampara-api-1028004784154.us-central1.run.app/user",
+                        {
+                            method: "GET",
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${token}`,
+                            },
+                        }
+                    );
+
+                    if (usersResponse.ok) {
+                        const users = await usersResponse.json();
+                        const usuario = Array.isArray(users)
+                            ? users.find((u) => u._id === data.userId)
+                            : null;
+
+                        if (usuario) {
+                            pessoaCompleta = { ...pessoaCompleta, ...usuario };
+                        }
+                    }
+                } catch (e) {
+                    console.warn("Não foi possível buscar dados do usuário:", e);
+                }
+            }
+
+            setPessoa(pessoaCompleta);
         } catch (error) {
             console.error("Erro:", error);
         } finally {
@@ -82,22 +115,44 @@ export default function OwnerDetails({navigation}) {
                     <View style={styles.card}>
                         <View style={styles.row}>
                             <Text style={styles.label}>Nome</Text>
-                            <View style={styles.placeholderName} />
+                            <Text style={styles.value}>{pessoa?.name || "—"}</Text>
                         </View>
 
                         <View style={styles.row}>
                             <Text style={styles.label}>Idade</Text>
-                            <Text style={styles.value}>—</Text>
+                            <Text style={styles.value}>
+                                {pessoa?.age != null ? `${pessoa.age} anos` : "—"}
+                            </Text>
                         </View>
 
                         <View style={styles.row}>
                             <Text style={styles.label}>Localidade</Text>
-                            <Text style={styles.value}>—</Text>
+                            <Text style={styles.value}>
+                                {pessoa?.city
+                                    ? `${pessoa.city}${pessoa.state ? ` (${pessoa.state})` : ""}`
+                                    : "—"}
+                            </Text>
+                        </View>
+
+                        <View style={styles.row}>
+                            <Text style={styles.label}>Email</Text>
+                            <Text style={styles.value}>{pessoa?.email || "—"}</Text>
+                        </View>
+
+                        <View style={styles.row}>
+                            <Text style={styles.label}>Telefone</Text>
+                            <Text style={styles.value}>
+                                {pessoa?.phone || pessoa?.telefone || "—"}
+                            </Text>
                         </View>
 
                         <View style={styles.row}>
                             <Text style={styles.label}>Histórico</Text>
-                            <Text style={styles.value}>Primeiro pedido</Text>
+                            <Text style={styles.value}>
+                                {pessoa?.totalRequests
+                                    ? `${pessoa.totalRequests} pedidos`
+                                    : "Primeiro pedido"}
+                            </Text>
                         </View>
                     </View>
 
